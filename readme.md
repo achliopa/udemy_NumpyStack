@@ -80,4 +80,48 @@ for e,f in zip(a,b):
 
 ## Section 3: Pandas
 
+* manual data loading from csv into numpy array is cumbersome
+```
+for line in open('./data_2d.csv'):
+  row = line.split(',')
+  sample = map(float, row)
+  X.append(sample)
+```
+* the panda way is easier import then use read_csv `X = pd.read_csv('data_2d.csv',header=None)`
+* panda dataframes offer many methods like
+	* `.info()` info on dataframe
+	* `.head()` first rows, passing a num gives a num of first rows 
+* dataframes are molike like DB tables. not 2D numpy arrays
+* if we know indexes the easies way to access a specific element is
+	* convert dataframe to matrix `M = X.to_numpy()` 
+	* access `M[0,0]`
+* when we use in pandas `X[0]` we get the column with name 0
+* when we use in a 2d matrix `X[0]` in numpy we get first row
+* pandas column is of type `pandas.core.series.Series`
+* to get a row in a dtaframe we use .iloc[index] which is of Series type
+* iloc supports list of rows or range
+* we can apply criteria in dataframe seleection `X[X[0] < 5]` means select row where column 0 val is <5
+* `X[0]<5` returns an Series of booleans is the selection matrix
+* we load in aanew csv `df = pd.read_csv('international-airline-passengers.csv',engine="python",skipfooter=3)`
+* in this command we set skipfooter=3 to skip last 2 lines of irrelevant data, also we skip Heders=None as it has header line
+* skipfooter does not work with default C engine. so it needs python engine to work
+* with `df.columns` we see thje column names.
+* to assign new column names `df.columns = ["month","passengers"]`
+* we can now retrieve the column by name as `df["month"]` or `df.month`
+* to add a new column with all 1s `df["ones"]=1`
+* to add a new column where each value is depnedent on the other columns values for this row we use apply and lamda functions
+```
+df["x1x2"] = df.apply(lambda row: row["x1"]*row["x2"],axis=1)
+```
+* axis=1 means the method is applied accross each row (vertically) and not across each column (horizontally)
+* the above is equivalent to
+```
+def get)interaction(row):
+	return row["x1"]*row["x2"]
+df["x1x2"] = df.apply(get_interaction,axis=1)
+* to join dataframes on a common column `m = pd.merge(t1,t2,on="user_id")` or `t1.merge(t2,on="user_id")`
+```
+
+## Section 4: Matplotlib
+
 * 
