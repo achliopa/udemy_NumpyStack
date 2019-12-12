@@ -124,4 +124,72 @@ df["x1x2"] = df.apply(get_interaction,axis=1)
 
 ## Section 4: Matplotlib
 
-* 
+* after importing matplotlib and defining the 2 arrays x,y we plot aline chart `plt.plot(x,y)`
+* we can add labels to plot
+```
+plt.xlabel("time")
+plt.ylabel("some time method")
+plt.title("sin plot")
+plt.plot(x,y)
+```
+* `plt.show()` forces plot to show
+* scatterplot `plt.scatter(x,y)` helps find correlations in data
+* histogram `plt.hist(x)` shows the distribution of values using buckets
+* we can control the number of buckets using param bins `plt.hist(R,bins=20)`
+* in linear regresion we get a good fit when the error distance is equaly distributed in a bell shaped histogram
+* to plot an image we reshape our matrix to a 2D `im = im.reshape(28,28)` and then plot the image `plt.imshow(im)`
+* we can play with colormap `plt.imshow(im, cmap="gray")`
+* we can invert the color `plt.imshow(255 - im, cmap="gray")`
+
+## Section 5: Scipy
+
+* the most common distribution is the Gaussian. 
+* the Gaussian PDF (probability density function) answers the question. given a sample of a random variable whats the probability
+* scipy offers a fast ready method to calc PDF
+* we import the lib `from scipy.stats import norm`
+* and calc the pdf of 0 in a standardnormal distribution (gausian) `norm.pdf(0)`
+* we can pass in params such as mean 'loc' and  standard deviation 'scale' of the gaussian `norm.pdf(0,loc=5,scale=10)`
+* variace is standard deviation squared
+* we can clac pdf values of an array at same time instead of iteratiing
+```
+r = np.random.randn(10)
+norm.pdf(r)
+```
+* if we want to calculate the joint probability of some data samples we need the log of Gaussian PDF `norm.logpdf(r)`
+* CDF or Cumulative distribution Function is the integral of PDF from -inf to x
+* the integral is not solvable, it is calculated numericaly
+* scipy has it biltin `norm.cdf(r)`
+* cdf has also log CDF `norm.logcdf(r)`
+* to sample from a Standard Normal Distribution `r = np.random.randn(1000))`
+* to sample from a Gaussian distribution with another mean and standard deviation `r = 10*np.random.randn(10000) + 5`
+* we create a 2D gaussian distribution and plot it in a scatteplot
+```
+r = np.random.randn(10000,2)
+plt.scatter(r[:,0],r[:,1])
+```
+* for an elliptical gaussian (2D gaussian with arbitrary std dev and mean) in one axis
+```
+r[:,1] = 5*r[:,1]+2 
+```
+* for producing a multivariate normal distributution using scipy
+```
+cov = np.array([[1,0.8],[0.8,3]])
+from scipy.stats import multivariate_normal as mvn
+mu = np.array([0,2])
+r = mvn.rvs(mean=mu,cov=cov,size=1000)
+```
+* same using numpy `r = np.random.multivariate_normal(mean=mu,cov=cov,size=1000)`
+* with `scipy.lo.loadmat()` we can load matlab files .mat
+* to load sound files (.wav) `scipy.io.wavfile.read()` and .write() to write
+* for DSP we heavily use convolution. scipy.signal lib has a whole bunch of methods for DSP
+* FFT is also widely used in DSP to go from time domain tot he frequency domain
+* we demo it on a siusoidal signal we expect FFT to show 3 spikes on the 3 freqs used
+```
+x = np.linspace(0,100,10000)
+y = np.sin(x) + np.sin(3*x) + np.sin(5*x)
+Y = np.fft.fft(y)
+```
+* FFT gives a signal of complex nums so we need to find magnitude before ploting
+```
+plt.plot(np.abs(Y))
+```
